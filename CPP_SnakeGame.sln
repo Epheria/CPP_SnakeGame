@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CPP_SnakeGame", "CPP_SnakeGame\CPP_SnakeGame.vcxproj", "{10462DA2-7B91-426C-A2E7-6C7A8DE2F10D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{10462DA2-7B91-426C-A2E7-6C7A8DE2F10D}.Debug|x64.ActiveCfg = Debug|x64
+		{10462DA2-7B91-426C-A2E7-6C7A8DE2F10D}.Debug|x64.Build.0 = Debug|x64
+		{10462DA2-7B91-426C-A2E7-6C7A8DE2F10D}.Debug|x86.ActiveCfg = Debug|Win32
+		{10462DA2-7B91-426C-A2E7-6C7A8DE2F10D}.Debug|x86.Build.0 = Debug|Win32
+		{10462DA2-7B91-426C-A2E7-6C7A8DE2F10D}.Release|x64.ActiveCfg = Release|x64
+		{10462DA2-7B91-426C-A2E7-6C7A8DE2F10D}.Release|x64.Build.0 = Release|x64
+		{10462DA2-7B91-426C-A2E7-6C7A8DE2F10D}.Release|x86.ActiveCfg = Release|Win32
+		{10462DA2-7B91-426C-A2E7-6C7A8DE2F10D}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FA63D955-E025-46C9-80E8-692CFBC1344F}
+	EndGlobalSection
+EndGlobal
