@@ -11,7 +11,7 @@ using namespace std;
 #define KEY_ESC 27
 #define MAX_RANDOMBOX 10
 #define MAX_PREY 10
-#define PREY_CLOCK 500
+#define PREY_CLOCK 1000
 #define PLAYER_DEFAULT 500
 
 enum DIRECTION

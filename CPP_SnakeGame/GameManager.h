@@ -28,6 +28,7 @@ private:
 	int m_iKillCount;
 	int m_iPreyCount;
 	int m_iPreyClock;
+	bool m_bGameOver;
 	Player m_Player;
 	MapDraw m_DrawManager;
 	vector<PreyPos> m_PreyList;
@@ -38,6 +39,9 @@ public:
 	void RandomObjectCreate();
 	void RandomPreyDraw();
 	void MenuDraw();
+	bool CollisionBox();
+	void CollisionPrey();
+	void DrawKillCount();
 	GameManager();
 	~GameManager();
 };

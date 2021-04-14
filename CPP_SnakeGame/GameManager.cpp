@@ -9,6 +9,8 @@ GameManager::GameManager()
 	m_iHeight = 30;
 	m_iPreyCount = 0;
 	m_iPreyClock = clock();
+	m_iKillCount = 0;
+	m_bGameOver = false;
 }
 
 void GameManager::Update()
@@ -24,6 +26,7 @@ void GameManager::Update()
 		case 2:
 			m_BoxList.clear();
 			m_PreyList.clear();
+			m_Player.ClearTail();
 			return;
 		default:
 			continue;
@@ -47,24 +50,44 @@ void GameManager::PlayGame()
 			{
 			case DIRECTION_LEFT:
 				m_Player.MovePlayer(DIRECTION_LEFT);
+				if (CollisionBox() == true)
+					break;
+				CollisionPrey();
+				m_Player.MoveDraw();
 				break;
 			case DIRECTION_RIGHT:
 				m_Player.MovePlayer(DIRECTION_RIGHT);
+				if (CollisionBox() == true)
+					break;
+				CollisionPrey();
+				m_Player.MoveDraw();
 				break;
 			case DIRECTION_UP:
 				m_Player.MovePlayer(DIRECTION_UP);
+				if (CollisionBox() == true)
+					break;
+				CollisionPrey();
+				m_Player.MoveDraw();
 				break;
 			case DIRECTION_DOWN:
 				m_Player.MovePlayer(DIRECTION_DOWN);
+				if (CollisionBox() == true)
+					break;
+				CollisionPrey();
+				m_Player.MoveDraw();
 				break;
 			case KEY_ESC:
 				return;
 			}
 		}
-		if(ch != NULL)
+		if (ch != NULL)
+		{
 			m_Player.MovePlayer(ch);
+			m_Player.MoveDraw();
+		}
 		if(m_iPreyCount < MAX_PREY)
 			RandomPreyDraw();
+		DrawKillCount();
 	}
 }
 
@@ -136,6 +159,45 @@ void GameManager::RandomPreyDraw()
 	}
 }
 
+bool GameManager::CollisionBox()
+{
+	int x = 0, y = 0;
+	if (x == m_Player.PlayerPosx() || y == m_Player.PlayerPosy())
+	{
+		m_bGameOver = true;
+		return m_bGameOver;
+	}
+	for (vector<BoxPos>::iterator iter = m_BoxList.begin(); iter != m_BoxList.end(); iter++)
+	{
+		if (iter->m_ibx == m_Player.PlayerPosx() && iter->m_iby == m_Player.PlayerPosy())
+		{
+			m_bGameOver = true;
+			return m_bGameOver;
+		}
+	}
+	return false;
+}
+
+void GameManager::CollisionPrey()
+{
+	for (vector<PreyPos>::iterator iter = m_PreyList.begin(); iter != m_PreyList.end(); iter++)
+	{
+		if (iter->m_ipx == m_Player.PlayerPosx() && iter->m_ipy == m_Player.PlayerPosy())
+		{
+			m_iKillCount++;
+			m_Player.GetEatCount(m_iKillCount);
+			m_Player.CreateTail();
+			//m_PreyList.erase(iter);
+			break;
+		}
+	}
+}
+
+void GameManager::DrawKillCount()
+{
+	m_DrawManager.DrawMidText("KillCount : ", m_iWidth, m_iHeight + 10);
+	m_DrawManager.IntDraw(m_iKillCount, m_iWidth + 15, m_iHeight + 10);
+}
 
 GameManager::~GameManager()
 {

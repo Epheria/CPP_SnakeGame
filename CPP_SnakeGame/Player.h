@@ -2,11 +2,12 @@
 #include "Macro.h"
 #include "MapDraw.h"
 
-typedef struct Pos
+typedef struct TailPos
 {
 	int m_itx;
 	int m_ity;
-}Pos;
+	string m_strTail;
+}TailPos;
 
 class Player
 {
@@ -14,14 +15,34 @@ private:
 	int m_ix;
 	int m_iy;
 	int m_iMoveClock;
+	int m_iEatCount;
+	int m_iDirection;
 	MapDraw PlayerDraw;
 	string m_strPlayerShape;
-	vector<Pos> m_Tail;
+	vector<TailPos> m_Tail;
 public:
 	void CreatePlayer(int x, int y);
 	void MovePlayer(int iDirection);
-	void Collision();
+	void MoveDraw();
 	void CreateTail();
+	void UpdateTailPos();
+
+	inline int PlayerPosx()
+	{
+		return m_ix;
+	}
+	inline int PlayerPosy()
+	{
+		return m_iy;
+	}
+	inline void GetEatCount(int iPrey)
+	{
+		m_iEatCount += iPrey;
+	}
+	inline void ClearTail()
+	{
+		m_Tail.clear();
+	}
 	Player();
 	~Player();
 };

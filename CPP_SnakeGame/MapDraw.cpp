@@ -66,6 +66,12 @@ int MapDraw::Input(int x, int y)
 	return iSelect;
 }
 
+void MapDraw::IntDraw(int iNum, int x, int y)
+{
+	gotoxy(x, y);
+	cout << iNum;
+}
+
 MapDraw::~MapDraw()
 {
 }

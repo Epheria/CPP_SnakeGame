@@ -8,6 +8,7 @@ public:
 	void DrawMidText(string str, int x, int y);
 	void ErasePoint(int x, int y);
 	int Input(int x, int y);
+	void IntDraw(int iNum, int x, int y);
 	MapDraw();
 	inline void gotoxy(int x, int y)
 	{
