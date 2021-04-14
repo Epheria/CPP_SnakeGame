@@ -143,14 +143,12 @@
     <ClInclude Include="Macro.h" />
     <ClInclude Include="MapDraw.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Prey.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapDraw.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Prey.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

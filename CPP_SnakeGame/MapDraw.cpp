@@ -23,13 +23,15 @@ void MapDraw::BoxDraw(int Start_x, int Start_y, int Width, int Height)
 				cout << "¢Æ";
 			cout << "¢Æ";
 		}
+		else
+		{
+			cout << "¢Æ";
+			for (int x = 1; x < Width - 1; x++)
+				cout << "  ";
+			cout << "¢Æ";
+		}
 	}
 	return;
-}
-
-void MapDraw::RandomBoxDraw(int Start_x, int Start_y, int Width, int Height)
-{
-
 }
 
 void MapDraw::DrawMidText(string str, int x, int y)
