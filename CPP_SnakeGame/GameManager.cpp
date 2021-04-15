@@ -43,6 +43,7 @@ void GameManager::PlayGame()
 	m_DrawManager.BoxDraw(m_ix, m_iy, m_iWidth, m_iHeight);
 	RandomObjectCreate();
 	m_Player.CreatePlayer(m_iWidth, m_iHeight);
+
 	while (1)
 	{
 		if (_kbhit())
@@ -52,44 +53,27 @@ void GameManager::PlayGame()
 			{
 			case DIRECTION_LEFT:
 				m_Player.MovePlayer(DIRECTION_LEFT);
-				if (CollisionBox() == true)
-				{
-					ShowGameOver();
-					return;
-				}
-				CollisionPrey();
 				break;
 			case DIRECTION_RIGHT:
 				m_Player.MovePlayer(DIRECTION_RIGHT);
-				if (CollisionBox() == true)
-				{
-					ShowGameOver();
-					return;
-				}	
-				CollisionPrey();
 				break;
 			case DIRECTION_UP:
 				m_Player.MovePlayer(DIRECTION_UP);
-				if (CollisionBox() == true)
-				{
-					ShowGameOver();
-					return;
-				}
-				CollisionPrey();
 				break;
 			case DIRECTION_DOWN:
 				m_Player.MovePlayer(DIRECTION_DOWN);
-				if (CollisionBox() == true)
-				{
-					ShowGameOver();
-					return;
-				}
-				CollisionPrey();
 				break;
 			case KEY_ESC:
 				return;
 			}
+			if (CollisionBox() == true)
+			{
+				ShowGameOver();
+				return;
+			}
+			CollisionPrey();
 		}
+
 		if (ch != NULL)
 		{
 			m_Player.MovePlayer(ch);

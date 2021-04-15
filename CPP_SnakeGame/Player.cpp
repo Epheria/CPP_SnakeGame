@@ -158,21 +158,16 @@ void Player::CreateTail()
 {
 	TailPos tmp;
 	tmp.m_strTail = "¡Û";
+
 	if (m_iDirection == DIRECTION_LEFT)
 		tmp.m_itx = m_ix + m_iEatCount;
-
 	else if (m_iDirection == DIRECTION_RIGHT)
-	{
 		tmp.m_itx = m_ix - m_iEatCount;
-	}
 	else if (m_iDirection == DIRECTION_UP)
-	{
 		tmp.m_ity = m_iy + m_iEatCount;
-	}
 	else if (m_iDirection == DIRECTION_DOWN)
-	{
 		tmp.m_ity = m_iy - m_iEatCount;
-	}
+
 	m_Tail.push_back(tmp);
 }
 
