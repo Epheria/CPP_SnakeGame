@@ -5,7 +5,7 @@ GameManager::GameManager()
 {
 	m_ix = 0;
 	m_iy = 0;
-	m_iWidth = 30;
+	m_iWidth = 40;
 	m_iHeight = 30;
 	m_iPreyCount = 0;
 	m_iPreyClock = clock();
@@ -26,7 +26,9 @@ void GameManager::Update()
 		case 2:
 			m_BoxList.clear();
 			m_PreyList.clear();
-			m_Player.ClearTail();
+			m_iPreyCount = 0;
+			m_iKillCount = 0;
+			m_Player.InitInfo();
 			return;
 		default:
 			continue;
@@ -176,7 +178,8 @@ void GameManager::RandomPreyDraw()
 
 bool GameManager::CollisionBox()
 {
-	if (m_Player.PlayerPosx() == 0 || m_Player.PlayerPosy() == 0 || m_Player.PlayerPosx() == m_iWidth - 1|| m_Player.PlayerPosy() == m_iHeight - 1)
+	if (m_Player.PlayerPosx() == 0 || m_Player.PlayerPosy() == 0 || m_Player.PlayerPosx() == m_iWidth - 1|| m_Player.PlayerPosy() == m_iHeight - 1
+		|| m_Player.CollisionTail() == true)
 	{
 		m_bGameOver = true;
 		return m_bGameOver;
@@ -220,8 +223,10 @@ void GameManager::ShowGameOver()
 
 	m_PreyList.clear();
 	m_BoxList.clear();
+	m_iPreyCount = 0;
 	m_iKillCount = 0;
-	m_Player.InitEatCount();
+	m_Player.InitInfo();
+
 	m_DrawManager.DrawMidText("¡Ú ¡Ù ¡Ú Game Over ¡Ú ¡Ù ¡Ú", m_iWidth, m_iHeight/2);
 	m_DrawManager.DrawMidText("Continue : Space Bar", m_iWidth, m_iHeight/2 + 2);
 	while (1)
