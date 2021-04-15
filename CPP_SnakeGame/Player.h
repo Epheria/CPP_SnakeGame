@@ -23,7 +23,9 @@ private:
 public:
 	void CreatePlayer(int x, int y);
 	void MovePlayer(int iDirection);
-	void MoveDraw();
+	void UniTail();
+	void DrawTail();
+	void EraseTail();
 	void CreateTail();
 	void UpdateTailPos();
 
@@ -35,13 +37,17 @@ public:
 	{
 		return m_iy;
 	}
-	inline void GetEatCount(int iPrey)
+	inline void GetEatCount()
 	{
-		m_iEatCount += iPrey;
+		m_iEatCount++;
 	}
 	inline void ClearTail()
 	{
 		m_Tail.clear();
+	}
+	inline void InitEatCount()
+	{
+		m_iEatCount = 0;
 	}
 	Player();
 	~Player();

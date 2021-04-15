@@ -36,6 +36,7 @@ private:
 public:
 	void Update();
 	void PlayGame();
+	void ShowGameOver();
 	void RandomObjectCreate();
 	void RandomPreyDraw();
 	void MenuDraw();

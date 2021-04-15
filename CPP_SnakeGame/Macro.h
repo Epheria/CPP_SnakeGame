@@ -12,7 +12,7 @@ using namespace std;
 #define MAX_RANDOMBOX 10
 #define MAX_PREY 10
 #define PREY_CLOCK 1000
-#define PLAYER_DEFAULT 500
+#define PLAYER_DEFAULT 200
 
 enum DIRECTION
 {
