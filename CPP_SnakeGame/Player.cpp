@@ -183,6 +183,7 @@ void Player::UpdateTailPos()
 		{
 			iter->m_itx = m_ix;
 			iter->m_ity = m_iy;
+			//¤·¤·
 		}
 
 		if (m_Tail.begin() != iter)
