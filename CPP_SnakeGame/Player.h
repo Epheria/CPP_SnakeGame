@@ -20,7 +20,6 @@ private:
 	int m_iMoveClock;
 	int m_iEatCount;
 	int m_iDirection;
-	bool m_bFlag;
 	MapDraw PlayerDraw;
 	string m_strPlayerShape;
 	vector<TailPos> m_Tail;

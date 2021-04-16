@@ -7,7 +7,6 @@ Player::Player()
 	m_strPlayerShape = "¢Á";
 	m_iEatCount = 0;
 	m_iDirection = 0;
-	m_bFlag = false;
 	m_iSpeed = PLAYER_DEFAULT;
 }
 
@@ -67,6 +66,7 @@ bool Player::MovePos()
 		UniTail();
 		return true;
 	}
+	return false;
 }
 
 void Player::UniTail()
@@ -135,10 +135,10 @@ bool Player::CollisionTail()
 	{
 		if (iter->m_itx == m_ix && iter->m_ity == m_iy)
 		{
-			m_bFlag = true;
-			return m_bFlag;
+			return true;
 		}
 	}
+	return false;
 }
 
 Player::~Player()
