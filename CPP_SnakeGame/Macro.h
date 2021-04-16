@@ -14,6 +14,14 @@ using namespace std;
 #define PREY_CLOCK 1000
 #define PLAYER_DEFAULT 250
 
+enum POS
+{
+	START_POSX = 0,
+	START_POSY = 0,
+	WIDTH = 40,
+	HEIGHT = 30
+};
+
 enum DIRECTION
 {
 	DIRECTION_LEFT = 'a',

@@ -20,105 +20,52 @@ void Player::CreatePlayer(int x, int y)
 
 void Player::MovePlayer(int iDirection)
 {
-	m_save_x = m_ix;
-	m_save_y = m_iy;
 	switch (iDirection)
 	{
 	case DIRECTION_LEFT:
-		if (m_iDirection == DIRECTION_RIGHT)
-		{
-			if (clock() - m_iMoveClock >= m_iSpeed)
-			{
-				PlayerDraw.ErasePoint(m_ix, m_iy);
-				m_ix++;
-				PlayerDraw.DrawPoint(m_strPlayerShape, m_ix, m_iy);
-				m_iMoveClock = clock();
-				UniTail();
-			}
-			break;
-		}
-		if (clock() - m_iMoveClock >= m_iSpeed)
-		{
-			PlayerDraw.ErasePoint(m_ix, m_iy);
-			m_ix--;
-			PlayerDraw.DrawPoint(m_strPlayerShape, m_ix, m_iy);
-			m_iMoveClock = clock();
-			UniTail();
-		}
-		m_iDirection = DIRECTION_LEFT;
+		if (m_iDirection != DIRECTION_RIGHT)
+			m_iDirection = DIRECTION_LEFT;
 		break;
 
 	case DIRECTION_RIGHT:
-		if (m_iDirection == DIRECTION_LEFT)
-		{
-			if (clock() - m_iMoveClock >= m_iSpeed)
-			{
-				PlayerDraw.ErasePoint(m_ix, m_iy);
-				m_ix--;
-				PlayerDraw.DrawPoint(m_strPlayerShape, m_ix, m_iy);
-				m_iMoveClock = clock();
-				UniTail();
-			}
-			break;
-		}
-		if (clock() - m_iMoveClock >= m_iSpeed)
-		{
-			PlayerDraw.ErasePoint(m_ix, m_iy);
-			m_ix++;
-			PlayerDraw.DrawPoint(m_strPlayerShape, m_ix, m_iy);
-			m_iMoveClock = clock();
-			UniTail();
-		}
-		m_iDirection = DIRECTION_RIGHT;
+		if (m_iDirection != DIRECTION_LEFT)
+			m_iDirection = DIRECTION_RIGHT;
 		break;
 
 	case DIRECTION_UP:
-		if (m_iDirection == DIRECTION_DOWN)
-		{
-			if (clock() - m_iMoveClock >= m_iSpeed)
-			{
-				PlayerDraw.ErasePoint(m_ix, m_iy);
-				m_iy++;
-				PlayerDraw.DrawPoint(m_strPlayerShape, m_ix, m_iy);
-				m_iMoveClock = clock();
-				UniTail();
-			}
-			break;
-		}
-		if (clock() - m_iMoveClock >= m_iSpeed)
-		{
-			PlayerDraw.ErasePoint(m_ix, m_iy);
-			m_iy--;
-			PlayerDraw.DrawPoint(m_strPlayerShape, m_ix, m_iy);
-			m_iMoveClock = clock();
-			UniTail();
-		}
-		m_iDirection = DIRECTION_UP;
+		if (m_iDirection != DIRECTION_DOWN)
+			m_iDirection = DIRECTION_UP;
 		break;
 
 	case DIRECTION_DOWN:
-		if (m_iDirection == DIRECTION_UP)
-		{
-			if (clock() - m_iMoveClock >= m_iSpeed)
-			{
-				PlayerDraw.ErasePoint(m_ix, m_iy);
-				m_iy--;
-				PlayerDraw.DrawPoint(m_strPlayerShape, m_ix, m_iy);
-				m_iMoveClock = clock();
-				UniTail();
-			}
-			break;
-		}
-		if (clock() - m_iMoveClock >= m_iSpeed)
-		{
-			PlayerDraw.ErasePoint(m_ix, m_iy);
-			m_iy++;
-			PlayerDraw.DrawPoint(m_strPlayerShape, m_ix, m_iy);
-			m_iMoveClock = clock();
-			UniTail();
-		}
-		m_iDirection = DIRECTION_DOWN;
+		if (m_iDirection != DIRECTION_UP)
+			m_iDirection = DIRECTION_DOWN;
 		break;
+	}
+}
+
+bool Player::MovePos()
+{
+	m_save_x = m_ix;
+	m_save_y = m_iy;
+
+	if (clock() - m_iMoveClock >= m_iSpeed)
+	{
+		PlayerDraw.ErasePoint(m_ix, m_iy);
+
+		if (m_iDirection == DIRECTION_LEFT)
+			m_ix--;
+		else if (m_iDirection == DIRECTION_RIGHT)
+			m_ix++;
+		else if (m_iDirection == DIRECTION_UP)
+			m_iy--;
+		else if (m_iDirection == DIRECTION_DOWN)
+			m_iy++;
+
+		PlayerDraw.DrawPoint(m_strPlayerShape, m_ix, m_iy);
+		m_iMoveClock = clock();
+		UniTail();
+		return true;
 	}
 }
 

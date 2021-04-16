@@ -27,6 +27,7 @@ private:
 public:
 	void CreatePlayer(int x, int y);
 	void MovePlayer(int iDirection);
+	bool MovePos();
 	void UniTail();
 	void DrawTail();
 	void EraseTail();
@@ -46,6 +47,10 @@ public:
 	{
 		m_iEatCount++;
 		m_iSpeed -= 10;
+	}
+	inline int GetScore()
+	{
+		return m_iEatCount;
 	}
 	inline void InitInfo()
 	{

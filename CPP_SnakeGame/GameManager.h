@@ -3,43 +3,28 @@
 #include "Player.h"
 #include "MapDraw.h"
 
-typedef struct BoxPos
+typedef struct Pos
 {
-	int m_ibx;
-	int m_iby;
-	string m_istrRandomBox;
-}BoxPos;
-
-typedef struct PreyPos
-{
-	int m_ipx;
-	int m_ipy;
-	string m_istrPrey;
-}PreyPos;
+	int m_ix;
+	int m_iy;
+	string m_str;
+}Pos;
 
 class GameManager
 {
 private:
-	int m_ix;
-	int m_iy;
-	int m_iWidth;
-	int m_iHeight;
-	int m_iMenuSelect;
-	int m_iKillCount;
-	int m_iPreyCount;
 	int m_iPreyClock;
-	bool m_bGameOver;
 	Player m_Player;
 	MapDraw m_DrawManager;
-	vector<PreyPos> m_PreyList;
-	vector<BoxPos> m_BoxList;
+	vector<Pos> m_PreyList;
+	vector<Pos> m_BoxList;
 public:
 	void Update();
 	void PlayGame();
 	void ShowGameOver();
 	void RandomObjectCreate();
 	void RandomPreyDraw();
-	void MenuDraw();
+	int MenuDraw(int iSelect);
 	bool CollisionBox();
 	void CollisionPrey();
 	void DrawKillCount();

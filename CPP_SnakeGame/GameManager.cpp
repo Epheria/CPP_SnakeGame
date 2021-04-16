@@ -3,32 +3,21 @@
 
 GameManager::GameManager()
 {
-	m_ix = 0;
-	m_iy = 0;
-	m_iWidth = 40;
-	m_iHeight = 30;
-	m_iPreyCount = 0;
 	m_iPreyClock = clock();
-	m_iKillCount = 0;
-	m_bGameOver = false;
 }
 
 void GameManager::Update()
 {
+	int iSelect = 0;
 	while (1)
 	{
-		MenuDraw();
-		switch (m_iMenuSelect)
+		iSelect = MenuDraw(iSelect);
+		switch (iSelect)
 		{
 		case 1:
 			PlayGame();
 			break;
 		case 2:
-			m_BoxList.clear();
-			m_PreyList.clear();
-			m_iPreyCount = 0;
-			m_iKillCount = 0;
-			m_Player.InitInfo();
 			return;
 		default:
 			continue;
@@ -40,32 +29,25 @@ void GameManager::PlayGame()
 {
 	char ch = NULL;
 	system("cls");
-	m_DrawManager.BoxDraw(m_ix, m_iy, m_iWidth, m_iHeight);
+	m_DrawManager.BoxDraw(START_POSX, START_POSY, WIDTH, HEIGHT);
 	RandomObjectCreate();
-	m_Player.CreatePlayer(m_iWidth, m_iHeight);
+	m_Player.CreatePlayer(WIDTH, HEIGHT);
 
 	while (1)
 	{
 		if (_kbhit())
 		{
 			ch = _getch();
+			m_Player.MovePlayer(ch);
 			switch (ch)
 			{
-			case DIRECTION_LEFT:
-				m_Player.MovePlayer(DIRECTION_LEFT);
-				break;
-			case DIRECTION_RIGHT:
-				m_Player.MovePlayer(DIRECTION_RIGHT);
-				break;
-			case DIRECTION_UP:
-				m_Player.MovePlayer(DIRECTION_UP);
-				break;
-			case DIRECTION_DOWN:
-				m_Player.MovePlayer(DIRECTION_DOWN);
-				break;
 			case KEY_ESC:
 				return;
 			}
+		}
+
+		if (m_Player.MovePos() == true)
+		{
 			if (CollisionBox() == true)
 			{
 				ShowGameOver();
@@ -74,46 +56,37 @@ void GameManager::PlayGame()
 			CollisionPrey();
 		}
 
-		if (ch != NULL)
-		{
-			m_Player.MovePlayer(ch);
-			if (CollisionBox() == true)
-			{
-				ShowGameOver();
-				return;
-			}
-			CollisionPrey();
-		}
-		if(m_iPreyCount < MAX_PREY)
+		if (m_PreyList.size() < MAX_PREY)
 			RandomPreyDraw();
 	}
 }
 
-void GameManager::MenuDraw()
+int GameManager::MenuDraw(int iSelect)
 {
 	system("cls");
-	m_DrawManager.BoxDraw(m_ix, m_iy, m_iWidth, m_iHeight);
-	m_DrawManager.DrawMidText("★ ☆ ★ Snake Game ★ ☆ ★", m_iWidth, m_iHeight / 4);
-	m_DrawManager.DrawMidText("1.게임 시작", m_iWidth, m_iHeight / 4 + 4);
-	m_DrawManager.DrawMidText("2. 게임 종료", m_iWidth, m_iHeight / 4 + 6);
-	m_DrawManager.DrawMidText("선택 : ", m_iWidth, m_iHeight / 4 + 8);
-	m_iMenuSelect = m_DrawManager.Input(m_iWidth + 6, m_iHeight / 4 + 8);
+	m_DrawManager.BoxDraw(START_POSX, START_POSY, WIDTH, HEIGHT);
+	m_DrawManager.DrawMidText("★ ☆ ★ Snake Game ★ ☆ ★", WIDTH, HEIGHT / 4);
+	m_DrawManager.DrawMidText("1.게임 시작", WIDTH, HEIGHT / 4 + 4);
+	m_DrawManager.DrawMidText("2. 게임 종료", WIDTH, HEIGHT / 4 + 6);
+	m_DrawManager.DrawMidText("선택 : ", WIDTH, HEIGHT / 4 + 8);
+	iSelect = m_DrawManager.Input(WIDTH + 6, HEIGHT / 4 + 8);
+	return iSelect;
 }
 
 void GameManager::RandomObjectCreate()
 {
 	srand(time(NULL));
-	BoxPos tmp_Box[MAX_RANDOMBOX];
+	Pos tmp_Box[MAX_RANDOMBOX];
 
 	for (int i = 0; i < MAX_RANDOMBOX; i++)
 	{
-		tmp_Box[i].m_istrRandomBox = "▒";
-		tmp_Box[i].m_ibx = rand() % (m_iWidth - 1) + 1;
-		tmp_Box[i].m_iby = rand() % (m_iHeight - 1) + 1;
+		tmp_Box[i].m_str = "▒";
+		tmp_Box[i].m_ix = rand() % (WIDTH - 1) + 1;
+		tmp_Box[i].m_iy = rand() % (HEIGHT - 1) + 1;
 		for (int j = 0; j < i; j++)
 		{
-			if ((tmp_Box[i].m_ibx == tmp_Box[j].m_ibx && tmp_Box[i].m_iby == tmp_Box[j].m_iby) 
-				|| (tmp_Box[i].m_ibx == m_iWidth / 2 && tmp_Box[i].m_iby == m_iHeight/2))
+			if ((tmp_Box[i].m_ix == tmp_Box[j].m_ix && tmp_Box[i].m_iy == tmp_Box[j].m_iy)
+				|| (tmp_Box[i].m_ix == WIDTH / 2 && tmp_Box[i].m_iy == HEIGHT / 2))
 			{
 				i--;
 				break;
@@ -122,58 +95,55 @@ void GameManager::RandomObjectCreate()
 		m_BoxList.push_back(tmp_Box[i]);
 	}
 
-	for (vector<BoxPos>::iterator iter = m_BoxList.begin(); iter != m_BoxList.end(); iter++)
+	for (vector<Pos>::iterator iter = m_BoxList.begin(); iter != m_BoxList.end(); iter++)
 	{
-		m_DrawManager.DrawPoint(iter->m_istrRandomBox, iter->m_ibx, iter->m_iby);
+		m_DrawManager.DrawPoint(iter->m_str, iter->m_ix, iter->m_iy);
 	}
 }
 
 void GameManager::RandomPreyDraw()
 {
 	srand(time(NULL));
-	PreyPos tmp_Prey[MAX_PREY];
-	int i = m_iPreyCount;
+	Pos tmp_Prey[MAX_PREY];
+	int i = m_PreyList.size();
 
 	if (clock() - m_iPreyClock >= PREY_CLOCK)
 	{
-		tmp_Prey[i].m_istrPrey = "♥";
-		tmp_Prey[i].m_ipx = rand() % (m_iWidth - 2) + 1;
-		tmp_Prey[i].m_ipy = rand() % (m_iHeight - 2) + 1;
+		tmp_Prey[i].m_str = "♥";
+		tmp_Prey[i].m_ix = rand() % (WIDTH - 2) + 1;
+		tmp_Prey[i].m_iy = rand() % (HEIGHT - 2) + 1;
 		for (int j = 0; j < i; j++)
 		{
-			if ((tmp_Prey[i].m_ipx == tmp_Prey[j].m_ipx && tmp_Prey[i].m_ipy == tmp_Prey[j].m_ipy) || (tmp_Prey[i].m_ipx == m_BoxList[j].m_ibx &&
-				tmp_Prey[i].m_ipy == m_BoxList[j].m_iby) || (tmp_Prey[i].m_ipx == m_BoxList[m_iPreyCount].m_ibx && tmp_Prey[i].m_ipy == m_BoxList[i].m_iby) ||
-				(tmp_Prey[i].m_ipx == m_iWidth / 2 && tmp_Prey[i].m_ipy == m_iHeight / 2))
+			if ((tmp_Prey[i].m_ix == tmp_Prey[j].m_ix && tmp_Prey[i].m_iy == tmp_Prey[j].m_iy) || (tmp_Prey[i].m_ix == m_BoxList[j].m_ix &&
+				tmp_Prey[i].m_iy == m_BoxList[j].m_iy) || (tmp_Prey[i].m_ix == m_BoxList[i].m_ix && tmp_Prey[i].m_iy == m_BoxList[i].m_iy) ||
+				(tmp_Prey[i].m_ix == WIDTH / 2 && tmp_Prey[i].m_iy == HEIGHT / 2))
 			{
-				tmp_Prey[i].m_ipx = rand() % (m_iWidth - 2) + 1;
-				tmp_Prey[i].m_ipy = rand() % (m_iHeight - 2) + 1;
+				tmp_Prey[i].m_ix = rand() % (WIDTH - 2) + 1;
+				tmp_Prey[i].m_iy = rand() % (HEIGHT - 2) + 1;
 				j--;
 				break;
 			}
 		}
 		m_PreyList.push_back(tmp_Prey[i]);
 
-		m_DrawManager.DrawPoint(m_PreyList[m_iPreyCount].m_istrPrey, m_PreyList[m_iPreyCount].m_ipx, m_PreyList[m_iPreyCount].m_ipy);
+		m_DrawManager.DrawPoint(m_PreyList[i].m_str, m_PreyList[i].m_ix, m_PreyList[i].m_iy);
 		m_iPreyClock = clock();
-		m_iPreyCount++;
 		DrawKillCount();
 	}
 }
 
 bool GameManager::CollisionBox()
 {
-	if (m_Player.PlayerPosx() == 0 || m_Player.PlayerPosy() == 0 || m_Player.PlayerPosx() == m_iWidth - 1|| m_Player.PlayerPosy() == m_iHeight - 1
+	if (m_Player.PlayerPosx() == 0 || m_Player.PlayerPosy() == 0 || m_Player.PlayerPosx() == WIDTH - 1 || m_Player.PlayerPosy() == HEIGHT - 1
 		|| m_Player.CollisionTail() == true)
 	{
-		m_bGameOver = true;
-		return m_bGameOver;
+		return true;
 	}
-	for (vector<BoxPos>::iterator iter = m_BoxList.begin(); iter != m_BoxList.end(); iter++)
+	for (vector<Pos>::iterator iter = m_BoxList.begin(); iter != m_BoxList.end(); iter++)
 	{
-		if (iter->m_ibx == m_Player.PlayerPosx() && iter->m_iby == m_Player.PlayerPosy())
+		if (iter->m_ix == m_Player.PlayerPosx() && iter->m_iy == m_Player.PlayerPosy())
 		{
-			m_bGameOver = true;
-			return m_bGameOver;
+			return true;
 		}
 	}
 	return false;
@@ -181,14 +151,12 @@ bool GameManager::CollisionBox()
 
 void GameManager::CollisionPrey()
 {
-	for (vector<PreyPos>::iterator iter = m_PreyList.begin(); iter != m_PreyList.end(); iter++)
+	for (vector<Pos>::iterator iter = m_PreyList.begin(); iter != m_PreyList.end(); iter++)
 	{
-		if (iter->m_ipx == m_Player.PlayerPosx() && iter->m_ipy == m_Player.PlayerPosy())
+		if (iter->m_ix == m_Player.PlayerPosx() && iter->m_iy == m_Player.PlayerPosy())
 		{
-			m_iKillCount++;
 			m_Player.GetEatCount();
 			m_PreyList.erase(iter);
-			m_iPreyCount--;
 			m_Player.CreateTail();
 			break;
 		}
@@ -197,8 +165,8 @@ void GameManager::CollisionPrey()
 
 void GameManager::DrawKillCount()
 {
-	m_DrawManager.DrawMidText("Score : ", m_iWidth, m_iHeight + 2);
-	m_DrawManager.IntDraw(m_iKillCount, m_iWidth + 8, m_iHeight + 2);
+	m_DrawManager.DrawMidText("Score : ", WIDTH, HEIGHT + 2);
+	m_DrawManager.IntDraw(m_Player.GetScore(), WIDTH + 8, HEIGHT + 2);
 }
 
 void GameManager::ShowGameOver()
@@ -207,12 +175,10 @@ void GameManager::ShowGameOver()
 
 	m_PreyList.clear();
 	m_BoxList.clear();
-	m_iPreyCount = 0;
-	m_iKillCount = 0;
 	m_Player.InitInfo();
 
-	m_DrawManager.DrawMidText("★ ☆ ★ Game Over ★ ☆ ★", m_iWidth, m_iHeight/2);
-	m_DrawManager.DrawMidText("Continue : Space Bar", m_iWidth, m_iHeight/2 + 2);
+	m_DrawManager.DrawMidText("★ ☆ ★ Game Over ★ ☆ ★", WIDTH, HEIGHT / 2);
+	m_DrawManager.DrawMidText("Continue : Space Bar", WIDTH, HEIGHT / 2 + 2);
 	while (1)
 	{
 		ch = _getch();
